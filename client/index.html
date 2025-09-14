@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoLight Client</title>
+<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- iOS PWA Meta Tags -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <!-- Color Display -->
+  <div id="color-display" class="color-display"></div>
+
+  <!-- iOS Hint -->
+  <div id="ios-hint" class="ios-hint" style="display:none;">
+    <div class="ios-hint-content">
+      <div class="ios-icon">📱</div>
+      <div class="ios-text">
+        <h3>Add to Home Screen</h3>
+        <p>For the best party experience, add PhoLight to your home screen and go fullscreen!</p>
+      </div>
+      <button class="fullscreen-btn" onclick="requestFullscreen()">
+        <span>Go Fullscreen</span>
+        <div class="btn-glow"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Fullscreen Button - only show on web, not in web app -->
+  <button class="fullscreen-toggle" id="fullscreen-toggle" onclick="toggleFullscreen()" title="Toggle Fullscreen" style="display: none;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+    </svg>
+  </button>
+
+<script src="app.js" data-mode="client"></script>
+<script>
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      console.log('Error attempting to enable fullscreen:', err);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+function requestFullscreen() {
+  toggleFullscreen();
+}
+
+// Show iOS hint for iOS devices - only on web, not in web app
+const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent);
+const isInStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+if (isIos && !isInStandalone) {
+  document.getElementById('ios-hint').style.display = 'block';
+}
+
+// Show fullscreen button only on web, not in web app
+if (!isInStandalone) {
+  document.getElementById('fullscreen-toggle').style.display = 'block';
+}
+</script>
+</body>
+</html>

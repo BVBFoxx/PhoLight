@@ -1,0 +1,16 @@
+{
+  "name": "pholight",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "os": "^0.1.2",
+    "ws": "^8.18.3"
+  }
+}

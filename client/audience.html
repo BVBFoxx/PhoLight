@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoLight - Join the Party</title>
+<link rel="stylesheet" href="audience-style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- iOS PWA Meta Tags -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation">
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-container">
+    <!-- Left Side - Instructions -->
+    <div class="instructions-panel">
+      <div class="logo-section">
+        <div class="logo">
+          <span class="logo-text">Pho</span>
+          <span class="logo-accent">Light</span>
+          <div class="logo-glow"></div>
+        </div>
+        <h1 class="party-title">Join the Party!</h1>
+        <p class="party-subtitle">Connect your phone to create amazing light effects</p>
+      </div>
+
+      <div class="steps-container">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h3>Connect to WiFi</h3>
+            <p>Make sure you're connected to the same WiFi network as the host</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h3>Scan QR Code</h3>
+            <p>Use your phone's camera to scan the QR code on the right</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h3>Go Fullscreen</h3>
+            <p>Tap the fullscreen button for the best party experience</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h3>Enjoy the Show!</h3>
+            <p>Your phone will now display synchronized party lights</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tips-section">
+        <h3>💡 Pro Tips</h3>
+        <ul>
+          <li>Keep your phone charged for the best experience</li>
+          <li>Add PhoLight to your home screen for quick access</li>
+          <li>Turn up the brightness for maximum effect</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right Side - QR Code -->
+    <div class="qr-panel">
+      <div class="qr-container">
+        <h2>Scan to Join</h2>
+        <div id="qr-code" class="qr-code"></div>
+        <p class="qr-text">Point your camera at this code</p>
+        
+        <div class="url-display">
+          <span class="url-label">Or visit:</span>
+          <div class="url-box">
+            <span id="party-url">Loading...</span>
+            <button class="copy-btn" onclick="copyUrl()">📋</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-info">
+        <div class="status-item">
+          <div class="status-dot"></div>
+          <span>Party Status: <strong>Live</strong></span>
+        </div>
+        <div class="status-item">
+          <span class="participant-count">0</span>
+          <span>Participants Connected</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>PhoLight - Create Amazing Party Experiences</p>
+  </div>
+
+<script>
+// Load QRCode library dynamically
+function loadQRCodeLibrary() {
+  return new Promise((resolve, reject) => {
+    if (typeof qrcode !== 'undefined') {
+      resolve();
+      return;
+    }
+    
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+    script.onload = () => {
+      console.log('QRCode library loaded successfully');
+      resolve();
+    };
+    script.onerror = () => {
+      console.error('Failed to load QRCode library');
+      reject(new Error('QRCode library failed to load'));
+    };
+    document.head.appendChild(script);
+  });
+}
+
+// Generate QR code with current URL
+async function generateQRCode() {
+  const currentUrl = window.location.origin;
+  const qrCodeElement = document.getElementById('qr-code');
+  const urlElement = document.getElementById('party-url');
+  
+  urlElement.textContent = currentUrl;
+  
+  try {
+    await loadQRCodeLibrary();
+    
+    const qr = qrcode(0, 'M');
+    qr.addData(currentUrl);
+    qr.make();
+    
+    // Create canvas element
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const size = 300;
+    const cellSize = size / qr.getModuleCount();
+    
+    canvas.width = size;
+    canvas.height = size;
+    
+    // Clear canvas
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, size, size);
+    
+    // Draw QR code
+    ctx.fillStyle = '#ff0080';
+    for (let row = 0; row < qr.getModuleCount(); row++) {
+      for (let col = 0; col < qr.getModuleCount(); col++) {
+        if (qr.isDark(row, col)) {
+          ctx.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+    
+    // Clear existing content and add canvas
+    qrCodeElement.innerHTML = '';
+    qrCodeElement.appendChild(canvas);
+    console.log('QR Code generated successfully');
+  } catch (error) {
+    console.error('Failed to load QRCode library:', error);
+    qrCodeElement.innerHTML = '<p style="color: #ff0080; text-align: center;">QR Code Library Not Available</p>';
+  }
+}
+
+// Copy URL to clipboard
+function copyUrl() {
+  const url = document.getElementById('party-url').textContent;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    const originalText = btn.textContent;
+    btn.textContent = '✓';
+    btn.style.background = '#00ff00';
+    setTimeout(() => {
+      btn.textContent = originalText;
+      btn.style.background = '';
+    }, 2000);
+  });
+}
+
+// Update participant count
+function updateParticipantCount(count) {
+  document.querySelector('.participant-count').textContent = count;
+}
+
+// WebSocket connection for real-time updates
+const ws = new WebSocket(`ws://${window.location.hostname}:3000`);
+
+ws.addEventListener('open', () => {
+  console.log('Connected to PhoLight server');
+});
+
+ws.addEventListener('message', (event) => {
+  try {
+    const data = JSON.parse(event.data);
+    
+    if (data.type === 'participant-count') {
+      updateParticipantCount(data.count);
+    }
+  } catch (error) {
+    console.error('Error parsing message:', error);
+  }
+});
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  // Delay QR code generation to ensure library is loaded
+  setTimeout(() => {
+    generateQRCode();
+  }, 100);
+});
+</script>
+</body>
+</html>

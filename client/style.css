@@ -1,0 +1,264 @@
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: 'Space Grotesk', sans-serif;
+  background: #0a0a0a;
+  color: #ffffff;
+  position: relative;
+}
+
+/* Color Display */
+.color-display {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-display::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+  animation: colorPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes colorPulse {
+  from { opacity: 0.3; }
+  to { opacity: 0.7; }
+}
+
+/* iOS Hint */
+.ios-hint {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 200;
+  animation: iosHintSlide 0.5s ease-out;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+}
+
+@keyframes iosHintSlide {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.ios-hint-content {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.ios-icon {
+  font-size: 48px;
+  animation: bounce 2s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.ios-text {
+  flex: 1;
+}
+
+.ios-text h3 {
+  font-family: 'Orbitron', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(45deg, #ff0080, #8000ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ios-text p {
+  font-size: 16px;
+  color: #cccccc;
+  line-height: 1.5;
+}
+
+.fullscreen-btn {
+  background: linear-gradient(45deg, #ff0080, #8000ff);
+  border: none;
+  padding: 15px 30px;
+  border-radius: 25px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(255, 0, 128, 0.3);
+  flex-shrink: 0;
+}
+
+.fullscreen-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(255, 0, 128, 0.4);
+}
+
+.fullscreen-btn:active {
+  transform: translateY(0);
+}
+
+.btn-glow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.fullscreen-btn:hover .btn-glow {
+  left: 100%;
+}
+
+/* Fullscreen Toggle Button */
+.fullscreen-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 0, 128, 0.3);
+  border-radius: 50%;
+  color: #ff0080;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.fullscreen-toggle:hover {
+  background: rgba(255, 0, 128, 0.2);
+  border-color: #ff0080;
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(255, 0, 128, 0.3);
+}
+
+.fullscreen-toggle svg {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.fullscreen-toggle:hover svg {
+  transform: rotate(90deg);
+}
+
+/* Color Transitions */
+.color-display.color-transition {
+  transition: background-color 0.5s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .ios-hint-content {
+    flex-direction: column;
+    text-align: center;
+    padding: 15px;
+  }
+  
+  .ios-text h3 {
+    font-size: 20px;
+  }
+  
+  .ios-text p {
+    font-size: 14px;
+  }
+  
+  .fullscreen-btn {
+    padding: 12px 24px;
+    font-size: 14px;
+  }
+  
+  .fullscreen-toggle {
+    width: 45px;
+    height: 45px;
+    top: 15px;
+    right: 15px;
+  }
+  
+  .fullscreen-toggle svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ios-icon {
+    font-size: 36px;
+  }
+  
+  .ios-text h3 {
+    font-size: 18px;
+  }
+  
+  .ios-text p {
+    font-size: 13px;
+  }
+  
+  .fullscreen-btn {
+    padding: 10px 20px;
+    font-size: 13px;
+  }
+}
+
+/* Performance Optimizations */
+.color-display {
+  will-change: background-color;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

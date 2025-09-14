@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoLight Host</title>
+<link rel="stylesheet" href="host-style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-animation">
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <div class="logo-container">
+      <div class="logo">
+        <span class="logo-text">Pho</span>
+        <span class="logo-accent">Light</span>
+        <div class="logo-glow"></div>
+      </div>
+    </div>
+    
+    
+    <button id="logout-btn" class="logout-btn" style="display:none;">
+      <span>Logout</span>
+      <div class="btn-glow"></div>
+    </button>
+  </nav>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="login-screen">
+    <div class="login-container">
+      <div class="login-header">
+        <h1 class="login-title">Welcome to PhoLight</h1>
+        <p class="login-subtitle">Enter host mode to control the party</p>
+        <div class="password-hint">
+          <div class="hint-icon">🔑</div>
+          <div class="hint-text">
+            <strong>Password:</strong> Check your server terminal for the host password
+          </div>
+        </div>
+      </div>
+      
+      <div class="login-form">
+        <div class="input-group">
+          <input type="password" id="host-password" placeholder="Enter host password" required>
+          <div class="input-glow"></div>
+        </div>
+        
+        <button id="enter-host" class="enter-btn">
+          <span>Enter Host Mode</span>
+          <div class="btn-particles"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Host Controls -->
+  <div id="host-controls" class="host-controls" style="display:none">
+    <div class="controls-container">
+      <div class="controls-header">
+        <h2>Party Control Center</h2>
+        <div class="status-indicator">
+          <div class="status-dot"></div>
+          <span>Live</span>
+        </div>
+      </div>
+
+      <!-- Big Color Control Center -->
+      <div class="color-control-center">
+        <div class="color-picker-section">
+          <h3>Party Color Control</h3>
+          <div class="color-picker-large">
+            <input type="color" id="color-picker" value="#ff0080" class="color-picker">
+            <div class="color-preview" id="color-preview"></div>
+          </div>
+          <div class="color-controls">
+            <button id="send-color" class="send-color-btn">
+              <span>Send as static color</span>
+              <div class="btn-particles"></div>
+            </button>
+            <button id="random-color" class="random-color-btn">
+              <span>Random Color</span>
+              <div class="btn-glow"></div>
+            </button>
+          </div>
+        </div>
+
+        <div class="effects-section">
+          <h3>Party Effects</h3>
+          <div class="effects-grid">
+            <button class="effect-btn" data-effect="rainbow">
+              <span class="effect-icon">🌈</span>
+              <span class="effect-name">Rainbow</span>
+            </button>
+            <button class="effect-btn" data-effect="pulse">
+              <span class="effect-icon">💓</span>
+              <span class="effect-name">Pulse</span>
+            </button>
+            <button class="effect-btn" data-effect="strobe">
+              <span class="effect-icon">⚡</span>
+              <span class="effect-name">Strobe</span>
+            </button>
+            <button class="effect-btn" data-effect="wave">
+              <span class="effect-icon">🌊</span>
+              <span class="effect-name">Wave</span>
+            </button>
+            <button class="effect-btn" data-effect="disco">
+              <span class="effect-icon">🕺</span>
+              <span class="effect-name">Disco</span>
+            </button>
+            <button class="effect-btn" data-effect="fire">
+              <span class="effect-icon">🔥</span>
+              <span class="effect-name">Fire</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats and QR Section -->
+      <div class="stats-qr-section">
+        <div class="control-card stats-card">
+          <h3>Party Stats</h3>
+          <div class="stats-container">
+            <div class="stat-item">
+              <span class="stat-number" id="participant-count">0</span>
+              <span class="stat-label">Participants</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number" id="connection-status">Live</span>
+              <span class="stat-label">Status</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-card qr-card">
+          <h3>Join the Party</h3>
+          <div class="qr-container">
+            <div id="qr-code"></div>
+            <p class="qr-text">Scan to join the party!</p>
+            <button id="show-audience-screen" class="audience-btn">
+              <span>Show Audience Screen</span>
+              <div class="btn-glow"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script type="module" src="host.js" data-mode="host"></script>
+
+<script>
+// Audience screen functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const audienceBtn = document.getElementById('show-audience-screen');
+  if (audienceBtn) {
+    audienceBtn.addEventListener('click', function() {
+      const audienceUrl = window.location.origin + '/audience.html';
+      window.open(audienceUrl, '_blank', 'width=1200,height=800');
+    });
+  }
+
+  // Color picker preview update
+  const colorPicker = document.getElementById('color-picker');
+  const colorPreview = document.getElementById('color-preview');
+  
+  if (colorPicker && colorPreview) {
+    colorPicker.addEventListener('input', function() {
+      colorPreview.style.backgroundColor = this.value;
+    });
+    // Set initial preview color
+    colorPreview.style.backgroundColor = colorPicker.value;
+  }
+
+  // Random color button
+  const randomColorBtn = document.getElementById('random-color');
+  if (randomColorBtn) {
+    randomColorBtn.addEventListener('click', function() {
+      const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+      colorPicker.value = randomColor;
+      colorPreview.style.backgroundColor = randomColor;
+    });
+  }
+
+  // Effect buttons
+  const effectBtns = document.querySelectorAll('.effect-btn');
+  effectBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const effect = this.dataset.effect;
+      console.log('Effect selected:', effect);
+      // Add visual feedback
+      this.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        this.style.transform = '';
+      }, 150);
+    });
+  });
+});
+</script>
+</body>
+</html>
