@@ -57,13 +57,13 @@ Before contributing, ensure you have:
 
 2. **Clone your fork**
    ```bash
-   git clone https://github.com/BVBFoxx/pholight.git
+   git clone https://github.com/your-name/pholight.git
    cd pholight
    ```
 
 3. **Add upstream remote**
    ```bash
-   git remote add upstream https://github.com/BVBFoxx/pholight.git
+   git remote add upstream https://github.com/your-name/pholight.git
    ```
 
 4. **Install dependencies**
